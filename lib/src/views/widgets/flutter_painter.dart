@@ -54,6 +54,9 @@ class FlutterPainter extends StatelessWidget {
   /// Callback when the [PainterSettings] of [PainterController] are updated internally.
   final ValueChanged<PainterSettings>? onPainterSettingsChanged;
 
+  /// Handle interaction in object child Widget
+  final bool interactionEnabled;
+
   /// The builder used to build this widget.
   ///
   /// Using the default constructor, it will default to returning the [_FlutterPainterWidget].
@@ -63,29 +66,31 @@ class FlutterPainter extends StatelessWidget {
   final FlutterPainterBuilderCallback _builder;
 
   /// Creates a [FlutterPainter] with the given [controller] and optional callbacks.
-  const FlutterPainter(
-      {Key? key,
-      required this.controller,
-      this.onDrawableCreated,
-      this.onDrawableDeleted,
-      this.onSelectedObjectDrawableChanged,
-      this.onPainterSettingsChanged})
-      : _builder = _defaultBuilder,
+  const FlutterPainter({
+    Key? key,
+    required this.controller,
+    this.onDrawableCreated,
+    this.onDrawableDeleted,
+    this.onSelectedObjectDrawableChanged,
+    this.onPainterSettingsChanged,
+    this.interactionEnabled = true,
+  })  : _builder = _defaultBuilder,
         super(key: key);
 
   /// Creates a [FlutterPainter] with the given [controller], [builder] and optional callbacks.
   ///
   /// Using this constructor, the [builder] will be called any time the [controller] updates.
   /// It is useful if you want to build UI that automatically rebuilds on updates from [controller].
-  const FlutterPainter.builder(
-      {Key? key,
-      required this.controller,
-      required FlutterPainterBuilderCallback builder,
-      this.onDrawableCreated,
-      this.onDrawableDeleted,
-      this.onSelectedObjectDrawableChanged,
-      this.onPainterSettingsChanged})
-      : _builder = builder,
+  const FlutterPainter.builder({
+    Key? key,
+    required this.controller,
+    required FlutterPainterBuilderCallback builder,
+    this.onDrawableCreated,
+    this.onDrawableDeleted,
+    this.onSelectedObjectDrawableChanged,
+    this.onPainterSettingsChanged,
+    this.interactionEnabled = true,
+  })  : _builder = builder,
         super(key: key);
 
   @override
@@ -105,6 +110,7 @@ class FlutterPainter extends StatelessWidget {
                   onPainterSettingsChanged: onPainterSettingsChanged,
                   onSelectedObjectDrawableChanged:
                       onSelectedObjectDrawableChanged,
+                  interactionEnabled: interactionEnabled,
                 ));
           }),
     );
@@ -133,15 +139,19 @@ class _FlutterPainterWidget extends StatelessWidget {
   /// Callback when the [PainterSettings] of [PainterController] are updated internally.
   final ValueChanged<PainterSettings>? onPainterSettingsChanged;
 
+  /// Handle interaction in object child Widget
+  final bool interactionEnabled;
+
   /// Creates a [_FlutterPainterWidget] with the given [controller] and optional callbacks.
-  const _FlutterPainterWidget(
-      {Key? key,
-      required this.controller,
-      this.onDrawableCreated,
-      this.onDrawableDeleted,
-      this.onSelectedObjectDrawableChanged,
-      this.onPainterSettingsChanged})
-      : super(key: key);
+  const _FlutterPainterWidget({
+    Key? key,
+    required this.controller,
+    this.onDrawableCreated,
+    this.onDrawableDeleted,
+    this.onSelectedObjectDrawableChanged,
+    this.onPainterSettingsChanged,
+    required this.interactionEnabled,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +182,7 @@ class _FlutterPainterWidget extends StatelessWidget {
                       // controller: controller,
                       child: _ObjectWidget(
                         // controller: controller,
-                        interactionEnabled: true,
+                        interactionEnabled: interactionEnabled,
                         child: CustomPaint(
                           painter: Painter(
                             drawables: controller.value.drawables,
