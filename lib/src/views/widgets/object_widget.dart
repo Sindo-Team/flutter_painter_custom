@@ -711,7 +711,7 @@ class _ObjectWidgetState extends State<_ObjectWidget> {
     final newDrawable = drawable.copyWith(
       position: assistedPosition,
       scale: scale,
-      rotation: assistedRotation,
+      rotation: 0,
       assists: assists,
     );
 
