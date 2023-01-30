@@ -25,8 +25,13 @@ import 'painter_controller_widget.dart';
 import 'dart:math' as math;
 
 part 'free_style_widget.dart';
+
 part 'text_widget.dart';
+
 part 'object_widget.dart';
+
+part 'object_view_widget.dart';
+
 part 'shape_widget.dart';
 
 typedef DrawableCreatedCallback = Function(Drawable drawable);
@@ -180,16 +185,25 @@ class _FlutterPainterWidget extends StatelessWidget {
                     // controller: controller,
                     child: _ShapeWidget(
                       // controller: controller,
-                      child: _ObjectWidget(
-                        // controller: controller,
-                        interactionEnabled: interactionEnabled,
-                        child: CustomPaint(
-                          painter: Painter(
-                            drawables: controller.value.drawables,
-                            background: controller.value.background,
-                          ),
-                        ),
-                      ),
+                      child: interactionEnabled
+                          ? _ObjectWidget(
+                              // controller: controller,
+                              child: CustomPaint(
+                                painter: Painter(
+                                  drawables: controller.value.drawables,
+                                  background: controller.value.background,
+                                ),
+                              ),
+                            )
+                          : _ObjectViewWidget(
+                              // controller: controller,
+                              child: CustomPaint(
+                                painter: Painter(
+                                  drawables: controller.value.drawables,
+                                  background: controller.value.background,
+                                ),
+                              ),
+                            ),
                     ),
                   )),
                 ),
